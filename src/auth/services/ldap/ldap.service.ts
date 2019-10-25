@@ -10,6 +10,9 @@ export class LdapService {
   });
 
   public async auth(credentials: LoginRequestModel): Promise<any> {
+    this.client.on('error', function() {
+      console.log('error');
+    });
     const filter = await this.getFilter(credentials.username);
     const user = await this.search(filter, credentials.password);
     const result = user[0];
@@ -47,6 +50,10 @@ export class LdapService {
 
           searchRes.on('searchEntry', entry => {
             searchList.push(entry);
+          });
+
+          searchRes.on('error', entry => {
+            console.log('error');
           });
 
           searchRes.on('end', retVal => {
