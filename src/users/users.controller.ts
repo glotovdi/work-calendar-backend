@@ -8,7 +8,7 @@ import {
 } from '@nestjs/common';
 import { UsersService } from './services/users.service';
 
-@Controller('Users')
+@Controller('users')
 export class UsersController {
   constructor(private userService: UsersService) {}
 
@@ -20,8 +20,8 @@ export class UsersController {
 
   @Get('/:login')
   async getUserByLogin(@Res() res, @Param('login') login) {
-    const post = await this.userService.getUserByLogin(login);
-    if (!post) throw new NotFoundException('User does not exist!');
-    return res.status(HttpStatus.OK).json(post);
+    const user = await this.userService.getUserByLogin(login);
+    if (!user) throw new NotFoundException('User does not exist!');
+    return res.status(HttpStatus.OK).json(user);
   }
 }

@@ -15,14 +15,14 @@ export class UsersService {
   }
 
   async getUserByLogin(mailNickname: string): Promise<LoginResponseModel[]> {
-    const post = await this.userModel
+    const user = await this.userModel
       .find({ mailNickname: mailNickname })
       .exec();
-    return post;
+    return user;
   }
 
   async addUser(userInfo: LoginResponseModel): Promise<LoginResponseModel> {
-    const newPost = await this.userModel(userInfo);
-    return newPost.save();
+    const newUser = await this.userModel(userInfo);
+    return newUser.save();
   }
 }

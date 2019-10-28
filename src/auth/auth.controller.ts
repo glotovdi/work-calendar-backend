@@ -1,7 +1,7 @@
 import { Body, Controller, HttpStatus, Post, Res } from '@nestjs/common';
 import { UsersService } from '../users/services/users.service';
 import { LoginRequestModel } from './models/login.request.model';
-import { LdapService } from './services/ldap/ldap.service';
+import { LdapService } from './services/ldap.service';
 @Controller('auth')
 export class AuthController {
   constructor(
@@ -15,7 +15,6 @@ export class AuthController {
       const result = await this.usersService.getUserByLogin(
         ldapResult.mailNickname,
       );
-      console.log(ldapResult);
       if (result.length) {
         res.status(HttpStatus.OK).send(result);
       } else {
@@ -26,11 +25,4 @@ export class AuthController {
       res.status(HttpStatus.NOT_ACCEPTABLE).send('USER NOT FOUND');
     }
   }
-
-  // @Post('post')
-  // async createUser(@Res() res) {
-  //   const post = await this.userService.addPost();
-  //   console.log(post);
-  //   return res.status(HttpStatus.OK).json(post);
-  // }
 }
