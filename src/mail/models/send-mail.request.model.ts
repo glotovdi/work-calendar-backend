@@ -3,6 +3,6 @@ export class SendMailRequestModel {
   author: string;
   date: string;
   user: string;
-  targetUsers: string;
+  targetUsers: string[];
   status: string;
 }

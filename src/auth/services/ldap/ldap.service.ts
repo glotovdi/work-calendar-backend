@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { LoginRequestModel } from 'src/auth/models/login.request.model';
+import { LoginResponseModel } from 'src/auth/models/login.response.model';
 const ldap = require('ldapjs');
 @Injectable()
 export class LdapService {
@@ -7,11 +8,14 @@ export class LdapService {
 
   client = ldap.createClient({
     url: this.config.serverUrl,
+    reconnect: true,
   });
 
-  public async auth(credentials: LoginRequestModel): Promise<any> {
-    this.client.on('error', function() {
-      console.log('error');
+  public async auth(
+    credentials: LoginRequestModel,
+  ): Promise<LoginResponseModel> {
+    this.client.on('error', err => {
+      console.log(err);
     });
     const filter = await this.getFilter(credentials.username);
     const user = await this.search(filter, credentials.password);
@@ -20,7 +24,25 @@ export class LdapService {
       type: el.type,
       data: this.stringFromUTF8Array(el._vals[0]),
     }));
-    return result;
+
+    const data: LoginResponseModel = this.mapToSendOnClient(result.attributes);
+    return data;
+  }
+
+  private mapToSendOnClient(
+    attributes: { type: string; data: string }[],
+  ): LoginResponseModel {
+    return {
+      userName: attributes.find(el => el.type === 'cn').data,
+      location: attributes.find(el => el.type === 'l').data,
+      position: attributes.find(el => el.type === 'title').data,
+      whenCreated: attributes.find(el => el.type === 'whenCreated').data,
+      email: attributes.find(el => el.type === 'userPrincipalName').data,
+      telNumber: attributes.find(el => el.type === 'mobile').data,
+      physicalDeliveryOfficeName: attributes.find(
+        el => el.type === 'physicalDeliveryOfficeName',
+      ).data,
+    };
   }
 
   private getFilter(username: string): Promise<string> {
