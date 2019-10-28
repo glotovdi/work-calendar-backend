@@ -4,7 +4,12 @@ import { LoginResponseModel } from 'src/auth/models/login.response.model';
 const ldap = require('ldapjs');
 @Injectable()
 export class LdapService {
-  config = {};
+  config = {
+    readerDn: 'CN=ldap_sync,OU=ServiceUsers,OU=MADI,DC=it2g,DC=ru',
+    readerPwd: 'ab38A@f4172fed79',
+    serverUrl: 'ldap://dc01.it2g.ru',
+    suffix: 'OU=Users,OU=MADI,DC=it2g,DC=ru',
+  };
 
   client = ldap.createClient({
     url: this.config.serverUrl,
@@ -56,6 +61,9 @@ export class LdapService {
       )
         ? attributes.find(el => el.type === 'physicalDeliveryOfficeName').data
         : null,
+      mailNickname: attributes.find(el => el.type === 'mailNickname')
+        ? attributes.find(el => el.type === 'mailNickname').data
+        : null,
     };
   }
 
@@ -100,6 +108,8 @@ export class LdapService {
 
             for (let i = 0; i < searchList.length; i++)
               this.client.bind(searchList[0].objectName, password, err => {
+                console.log(err);
+
                 if (err) {
                   reject({ user: null });
                 } else {
