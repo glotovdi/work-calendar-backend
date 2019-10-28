@@ -4,12 +4,7 @@ import { LoginResponseModel } from 'src/auth/models/login.response.model';
 const ldap = require('ldapjs');
 @Injectable()
 export class LdapService {
-  config = {
-    readerDn: 'CN=ldap_sync,OU=ServiceUsers,OU=MADI,DC=it2g,DC=ru',
-    readerPwd: 'ab38A@f4172fed79',
-    serverUrl: 'ldap://dc01.it2g.ru',
-    suffix: 'OU=Users,OU=MADI,DC=it2g,DC=ru',
-  };
+  config = {};
 
   client = ldap.createClient({
     url: this.config.serverUrl,
