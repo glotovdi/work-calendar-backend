@@ -4,7 +4,12 @@ import { LoginResponseModel } from 'src/auth/models/login.response.model';
 const ldap = require('ldapjs');
 @Injectable()
 export class LdapService {
-  config = {};
+  config = {
+    readerDn: 'CN=ldap_sync,OU=ServiceUsers,OU=MADI,DC=it2g,DC=ru',
+    readerPwd: 'ab38A@f4172fed79',
+    serverUrl: 'ldap://dc01.it2g.ru',
+    suffix: 'OU=Users,OU=MADI,DC=it2g,DC=ru',
+  };
 
   client = ldap.createClient({
     url: this.config.serverUrl,
@@ -33,19 +38,34 @@ export class LdapService {
     attributes: { type: string; data: string }[],
   ): LoginResponseModel {
     return {
-      userName: attributes.find(el => el.type === 'cn').data,
-      location: attributes.find(el => el.type === 'l').data,
-      position: attributes.find(el => el.type === 'title').data,
-      whenCreated: attributes.find(el => el.type === 'whenCreated').data,
-      email: attributes.find(el => el.type === 'userPrincipalName').data,
-      telNumber: attributes.find(el => el.type === 'mobile').data,
+      userName: attributes.find(el => el.type === 'cn')
+        ? attributes.find(el => el.type === 'cn').data
+        : null,
+      location: attributes.find(el => el.type === 'l')
+        ? attributes.find(el => el.type === 'l').data
+        : null,
+      position: attributes.find(el => el.type === 'title')
+        ? attributes.find(el => el.type === 'title').data
+        : null,
+      whenCreated: attributes.find(el => el.type === 'whenCreated')
+        ? attributes.find(el => el.type === 'whenCreated').data
+        : null,
+      email: attributes.find(el => el.type === 'userPrincipalName')
+        ? attributes.find(el => el.type === 'userPrincipalName').data
+        : null,
+      telNumber: attributes.find(el => el.type === 'mobile')
+        ? attributes.find(el => el.type === 'mobile').data
+        : null,
       physicalDeliveryOfficeName: attributes.find(
         el => el.type === 'physicalDeliveryOfficeName',
-      ).data,
+      )
+        ? attributes.find(el => el.type === 'physicalDeliveryOfficeName').data
+        : null,
     };
   }
 
   private getFilter(username: string): Promise<string> {
+    const login = `${username}@it2g.ru`;
     return new Promise((resolve, reject) => {
       this.client.bind(this.config.readerDn, this.config.readerPwd, err => {
         if (err) {
@@ -53,7 +73,7 @@ export class LdapService {
           return;
         }
         resolve(
-          `(&(userPrincipalName=${username})(objectClass=user)(objectCategory=person)(!(userAccountControl:1.2.840.113556.1.4.803:=2)))`,
+          `(&(userPrincipalName=${login})(objectClass=user)(objectCategory=person)(!(userAccountControl:1.2.840.113556.1.4.803:=2)))`,
         );
       });
     });
