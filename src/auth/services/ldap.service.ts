@@ -33,7 +33,7 @@ export class LdapService {
     attributes: { type: string; data: string }[],
   ): LoginResponseModel {
     return {
-      userName: attributes.find(el => el.type === 'cn')
+      username: attributes.find(el => el.type === 'cn')
         ? attributes.find(el => el.type === 'cn').data
         : null,
       location: attributes.find(el => el.type === 'l')

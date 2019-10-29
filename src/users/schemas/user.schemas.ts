@@ -1,7 +1,7 @@
 import * as mongoose from 'mongoose';
 
 export const UserSchema = new mongoose.Schema({
-  userName: String,
+  username: String,
   location: String,
   position: String,
   whenCreated: String,

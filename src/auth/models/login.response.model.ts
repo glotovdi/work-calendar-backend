@@ -1,5 +1,5 @@
 export class LoginResponseModel {
-  userName: string;
+  username: string;
   location: string;
   position: string;
   whenCreated: string;
