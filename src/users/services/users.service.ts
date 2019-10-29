@@ -21,6 +21,11 @@ export class UsersService {
     return user;
   }
 
+  async getUserById(id: string): Promise<LoginResponseModel[]> {
+    const user = await this.userModel.findById(id).exec();
+    return user;
+  }
+
   async addUser(userInfo: LoginResponseModel): Promise<LoginResponseModel> {
     const newUser = await this.userModel(userInfo);
     return newUser.save();
