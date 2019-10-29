@@ -56,6 +56,9 @@ export class LdapService {
       )
         ? attributes.find(el => el.type === 'physicalDeliveryOfficeName').data
         : null,
+      mailNickname: attributes.find(el => el.type === 'mailNickname')
+        ? attributes.find(el => el.type === 'mailNickname').data
+        : null,
     };
   }
 
@@ -100,7 +103,7 @@ export class LdapService {
 
             for (let i = 0; i < searchList.length; i++)
               this.client.bind(searchList[0].objectName, password, err => {
-                if (err) {
+                if (err || !password) {
                   reject({ user: null });
                 } else {
                   resolve(searchList);

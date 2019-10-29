@@ -6,4 +6,5 @@ export class LoginResponseModel {
   email: string;
   telNumber: string;
   physicalDeliveryOfficeName: string;
+  mailNickname: string;
 }
