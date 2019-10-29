@@ -12,7 +12,7 @@ export class SendMailService {
       secure: false,
     });
 
-    const users = data.targetUsers.join(',');
+    const users = data.adress.join(',');
 
     const message = ` Пользователь ${data.author} изменил присутсвие на ${data.date} для ${data.user} на ${data.status}`;
     let info = await transporter.sendMail({
