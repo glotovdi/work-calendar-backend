@@ -16,7 +16,7 @@ export class AuthController {
         ldapResult.mailNickname,
       );
       if (result.length) {
-        res.status(HttpStatus.OK).send(result);
+        res.status(HttpStatus.OK).send(result[0]);
       } else {
         const newUser = await this.usersService.addUser(ldapResult);
         res.status(HttpStatus.OK).send(newUser);
