@@ -7,4 +7,5 @@ export class LoginResponseModel {
   telNumber: string;
   physicalDeliveryOfficeName: string;
   mailNickname: string;
+  isAdmin: boolean;
 }

@@ -59,6 +59,7 @@ export class LdapService {
       mailNickname: attributes.find(el => el.type === 'mailNickname')
         ? attributes.find(el => el.type === 'mailNickname').data
         : null,
+      isAdmin: false,
     };
   }
 

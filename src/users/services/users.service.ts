@@ -30,4 +30,12 @@ export class UsersService {
     const newUser = await this.userModel(userInfo);
     return newUser.save();
   }
+
+  async updateUserById(
+    id: string,
+    data: LoginResponseModel,
+  ): Promise<LoginResponseModel> {
+    const result = await this.userModel.findByIdAndUpdate(id, { ...data });
+    return result;
+  }
 }

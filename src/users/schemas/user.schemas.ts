@@ -9,4 +9,5 @@ export const UserSchema = new mongoose.Schema({
   telNumber: String,
   physicalDeliveryOfficeName: String,
   mailNickname: String,
+  isAdmin: Boolean,
 });
