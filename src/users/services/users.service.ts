@@ -31,11 +31,14 @@ export class UsersService {
     return newUser.save();
   }
 
-  async updateUserById(
-    id: string,
+  async updateUserByLogin(
+    login: string,
     data: LoginResponseModel,
   ): Promise<LoginResponseModel> {
-    const result = await this.userModel.findByIdAndUpdate(id, { ...data });
+    const result = await this.userModel.updateOne(
+      { mailNickname: login },
+      { ...data },
+    );
     return result;
   }
 }
